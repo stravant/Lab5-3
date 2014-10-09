@@ -41,6 +41,7 @@ public class MainActivity extends Activity {
         return true;
     }
     
+    private final int CAM_ACTIVITY_REQ_CODE = 12345;
 
     //This method creates an intent. 
     //It is told that we need camera action, and the results should be saved in a location that is sent to the intent.
@@ -59,30 +60,28 @@ public class MainActivity extends Activity {
 		File imageFile = new File(imagePathAndFileName);
 		imageFileUri = Uri.fromFile(imageFile);
 		
-		//TODO: Add your code here ...
-		//TODO: Add your code here ...
-		//TODO: Add your code here ...
-
+		Intent camIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+		camIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageFileUri);
+		startActivityForResult(camIntent, CAM_ACTIVITY_REQ_CODE);
     }
     
     //This method is run after returning back from camera activity:
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		
-    	if (requestCode == 12345){
+    	if (requestCode == CAM_ACTIVITY_REQ_CODE){
 			TextView tv = (TextView)findViewById(R.id.status);
 			
-			if (resultCode == RESULT_OK){
-			//TODO: Add your code here ...
-			//TODO: Add your code here ...
-			//TODO: Add your code here ...
-			//TODO: Add your code here ...
+			if (resultCode == RESULT_OK) {
+				tv.setText("Photo Completed");
+				ImageButton imageResult = (ImageButton)findViewById(R.id.TakeAPhoto);
+				imageResult.setImageDrawable(Drawable.createFromPath(imageFileUri.getPath()));
 			}
 			else
 				if (resultCode == RESULT_CANCELED){
 					tv.setText("Photo was canceled!");
 				}
 				else
-					tv.setText("What happened?!!");
+					tv.setText("Internal Camera Error");
 		}
     }
 }
